@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "z-mod:block/flower_good_luck"
+  }
+}
