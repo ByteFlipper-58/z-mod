@@ -1,10 +1,8 @@
 package com.byteflipper.zmod.block;
 
 import com.byteflipper.zmod.ZMod;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
@@ -18,10 +16,6 @@ import net.minecraft.util.Identifier;
 public class ModBlocks {
 
     public static final Block FLOWER_FLAME = registerBlock("flower_flame", new FlowerFlameBlock());
-
-    public static void registerBlockRenderLayers() {
-        BlockRenderLayerMap.INSTANCE.putBlock(FLOWER_FLAME, RenderLayer.getCutout());
-    }
 
     /**
      * Регистрирует блок в реестре блоков и одновременно регистрирует соответствующий блоковый элемент.
@@ -52,7 +46,6 @@ public class ModBlocks {
      */
     public static void registerModBlocks() {
         ZMod.LOGGER.info("Registering Mod Blocks for " + ZMod.MOD_ID);
-        registerBlockRenderLayers();
 
         // Добавляет зарегистрированные блоки в группу NATURAL
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.NATURAL).register(entries -> {

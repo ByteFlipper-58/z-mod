@@ -1,8 +1,11 @@
 package com.byteflipper.zmod;
 
 import com.byteflipper.zmod.block.ModBlocks;
+import com.byteflipper.zmod.util.DayNightManager;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.server.world.ServerWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +24,25 @@ public class ZMod implements ModInitializer {
 		// Proceed with mild caution.
 
 		ModBlocks.registerModBlocks();
+
+		DayNightManager.setDayLength(12000L); // Длительность дня в тиках
+		DayNightManager.setNightLength(36000L); // Длительность ночи в тиках (60 минут реального времени)
+
+		// Периодическое обновление времени
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
+			for (ServerWorld world : server.getWorlds()) {
+				long time = world.getTimeOfDay();
+				long dayLength = DayNightManager.getDayLength();
+				long nightLength = DayNightManager.getNightLength();
+
+				// Пример проверки времени и изменения (добавьте вашу логику)
+				if (DayNightManager.isDay(world)) {
+					// Пример выполнения действий для дня
+				} else if (DayNightManager.isNight(world)) {
+					// Пример выполнения действий для ночи
+				}
+			}
+		});
 
 		LOGGER.info("Hello Fabric world!");
 	}
