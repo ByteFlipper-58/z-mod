@@ -20,8 +20,8 @@ public class FlowerFlameBlock extends FlowerBlock {
         super(
                 RegistryEntry.of(StatusEffects.FIRE_RESISTANCE.value()),
                 10.0f,
-                FlowerBlock.Settings
-                        .create()
+                FlowerBlock.Settings.copy(Blocks.DANDELION)
+                        .nonOpaque()
                         .noCollision()
                         .breakInstantly()
                         .mapColor(MapColor.YELLOW)
