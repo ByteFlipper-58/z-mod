@@ -24,6 +24,12 @@ public class ZMod implements ModInitializer {
 		// Proceed with mild caution.
 
 		ModBlocks.registerModBlocks();
+		DayNightManager.initialize();
+		DayNightManager.setDayLength(2000);
+		DayNightManager.setNightLength(4000);
+		DayNightManager.setNightEnabled(true);
+		DayNightManager.setDayEnabled(false);
+		DayNightManager.setModConfigEnabled(true);
 
 		LOGGER.info("Hello Fabric world!");
 	}
