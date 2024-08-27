@@ -2,6 +2,8 @@ package com.byteflipper.zmod.block;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,6 +26,7 @@ public class FlowerFlameBlock extends FlowerBlock {
                         .nonOpaque()
                         .noCollision()
                         .breakInstantly()
+                        .luminance((state) -> {return 15;})
                         .mapColor(MapColor.YELLOW)
                         .sounds(BlockSoundGroup.GRASS)
         );
@@ -33,22 +36,33 @@ public class FlowerFlameBlock extends FlowerBlock {
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         super.randomDisplayTick(state, world, pos, random);
 
-        // Добавляем частицы пламени
-        for (int i = 0; i < 5; i++) { // Количество частиц
-            double offsetX = random.nextDouble() * 0.6 - 0.3;
-            double offsetY = random.nextDouble() * 0.6 - 0.3;
-            double offsetZ = random.nextDouble() * 0.6 - 0.3;
-            world.addParticle(ParticleTypes.FLAME,
+        // Generate particles circling around the block
+        double radius = 0.5;
+        int particleCount = 10;
+        for (int i = 0; i < particleCount; i++) {
+            double angle = random.nextDouble() * Math.PI * 2;
+            double offsetX = Math.cos(angle) * radius;
+            double offsetZ = Math.sin(angle) * radius;
+
+            // Particle slightly above the bottom of the block
+            world.addParticle(
+                    ParticleTypes.FLAME,
                     pos.getX() + 0.5 + offsetX,
-                    pos.getY() + 0.5 + offsetY,
+                    pos.getY() + 0.5, // Slightly above the center of the block
                     pos.getZ() + 0.5 + offsetZ,
-                    0.0, 0.0, 0.0);
+                    0.0, 0.0, 0.0
+            );
         }
     }
 
     @Override
-    protected float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
-        return 15;
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+        super.onEntityCollision(state, world, pos, entity);
+
+        // Ignite entities (players and mobs) that collide with the block
+        if (entity instanceof LivingEntity livingEntity && !world.isClient) {
+            livingEntity.setOnFireFor(5); // Set entities on fire for 5 seconds
+        }
     }
 
     @Override
